@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="dashboard-card animate-in">
+                <div class="card-header">
+                    <h2 class="mb-0">About AliEarn Ethiopia</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h4 class="text-accent">Our Mission</h4>
+                            <p class="text-white">
+                                To empower Ethiopians to earn extra income by completing simple tasks 
+                                related to AliExpress products and services.
+                            </p>
+                            <img src="{{ url_for('static', filename='images/about-mission.jpg') }}" class="img-fluid rounded" alt="Our Mission">
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4 class="text-accent">How It Works</h4>
+                            <ol class="text-white">
+                                <li>Register for free</li>
+                                <li>Complete simple tasks</li>
+                                <li>Earn money for each task</li>
+                                <li>Withdraw your earnings</li>
+                            </ol>
+                            <img src="{{ url_for('static', filename='images/about-process.jpg') }}" class="img-fluid rounded" alt="How It Works">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h4 class="text-accent">Why Choose Us?</h4>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-primary bg-opacity-10 h-100">
+                                    <div class="card-body">
+                                        <h5 class="text-accent"><i class="bi bi-cash-coin"></i> Real Earnings</h5>
+                                        <p class="text-white">Get paid for every completed task</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-primary bg-opacity-10 h-100">
+                                    <div class="card-body">
+                                        <h5 class="text-accent"><i class="bi bi-people"></i> Referral Program</h5>
+                                        <p class="text-white">Earn bonuses for inviting friends</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-primary bg-opacity-10 h-100">
+                                    <div class="card-body">
+                                        <h5 class="text-accent"><i class="bi bi-shield-check"></i> Secure</h5>
+                                        <p class="text-white">Your data and earnings are protected</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

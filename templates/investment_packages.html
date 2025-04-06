@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="dashboard-card animate-in">
+        <div class="card-header">
+            <h2 class="mb-0">VIP Investment Packages</h2>
+            <p class="mb-0 text-white-50">Choose a package to start earning</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for package in packages %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 vip-{{ package.level }}">
+                        <div class="card-header">
+                            <h4 class="text-center mb-0">{{ package.name }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="text-center text-accent">{{ package.price }} ETB</h2>
+                            <ul class="list-group list-group-flush bg-transparent">
+                                <li class="list-group-item bg-transparent text-white d-flex justify-content-between">
+                                    <span>Profit:</span>
+                                    <span class="fw-bold">{{ package.profit }} ETB</span>
+                                </li>
+                                <li class="list-group-item bg-transparent text-white d-flex justify-content-between">
+                                    <span>Duration:</span>
+                                    <span>{{ package.duration_days }} days</span>
+                                </li>
+                                <li class="list-group-item bg-transparent text-white d-flex justify-content-between">
+                                    <span>ROI:</span>
+                                    <span class="text-success">{{ ((package.profit/package.price)*100)|round(2) }}%</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-transparent text-center">
+                            <a href="{{ url_for('invest_package', package_id=package.id) }}" 
+                               class="btn {% if package.level == 1 %}btn-primary
+                                      {% elif package.level == 2 %}btn-success
+                                      {% elif package.level == 3 %}btn-warning
+                                      {% else %}btn-danger{% endif %} w-100">
+                                <i class="bi bi-arrow-right-circle"></i> Invest Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

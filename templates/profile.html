@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="dashboard-card animate-in">
+        <div class="card-header">
+            <h2 class="mb-0">My Profile</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Profile Picture Column -->
+                <div class="col-md-4 text-center mb-4">
+                    <div class="profile-pic-container mx-auto mb-3">
+                        <img src="{{ url_for('static', filename='images/profile-default.png') }}" 
+                             class="img-fluid rounded-circle border border-3 border-accent" 
+                             alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+                    <h4 class="text-accent">{{ user.username }}</h4>
+                    <p class="text-white-50">Member since {{ user.created_at.strftime('%b %Y') }}</p>
+                </div>
+
+                <!-- Account Info Column -->
+                <div class="col-md-8">
+                    <div class="card bg-dark bg-opacity-25 mb-4">
+                        <div class="card-header bg-dark bg-opacity-50">
+                            <h5 class="mb-0">Account Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <p class="mb-1 text-white-50">Username</p>
+                                    <p class="text-white">{{ user.username }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="mb-1 text-white-50">Phone Number</p>
+                                    <p class="text-white">+251 {{ user.phone }}</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="mb-1 text-white-50">Account Status</p>
+                                    <p class="text-white">
+                                        <span class="badge bg-success">Active</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="mb-1 text-white-50">Last Login</p>
+                                    <p class="text-white">
+                                        {% if user.last_login %}
+                                            {{ user.last_login.strftime('%Y-%m-%d %H:%M') }}
+                                        {% else %}
+                                            Never logged in
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Earnings Summary -->
+                    <div class="card bg-dark bg-opacity-25 mb-4">
+                        <div class="card-header bg-dark bg-opacity-50">
+                            <h5 class="mb-0">Earnings Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <p class="mb-1 text-white-50">Current Balance</p>
+                                    <h4 class="text-accent">{{ "%.2f"|format(user.balance) }} ETB</h4>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="mb-1 text-white-50">Referral Code</p>
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="text-accent me-2">{{ user.referral_code }}</h4>
+                                        <button class="btn btn-sm btn-outline-light" onclick="copyReferralCode()">
+                                            <i class="bi bi-clipboard"></i> Copy
+                                        </button>
+                                    </div>
+                                    <small class="text-white-50">Share this code to earn 50 ETB per referral</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="mb-1 text-white-50">Total Earned from Tasks</p>
+                                    <p class="text-white">{{ "%.2f"|format(total_earned) }} ETB</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="mb-1 text-white-50">Referral Earnings</p>
+                                    <p class="text-white">{{ "%.2f"|format(referral_earned) }} ETB</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button class="btn btn-primary me-md-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                            <i class="bi bi-key"></i> Change Password
+                        </button>
+                        <a href="{{ url_for('logout') }}" class="btn btn-danger">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" name="new_password" required>
+                        <div class="form-text text-white-50">Minimum 8 characters</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-check-circle"></i> Update Password
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyReferralCode() {
+    const code = "{{ user.referral_code }}";
+    navigator.clipboard.writeText(code).then(() => {
+        alert('Referral code copied to clipboard!');
+    });
+}
+
+document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    try {
+        const response = await fetch('/change_password', {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await response.json();
+        
+        if (data.error) {
+            alert(data.error);
+        } else {
+            alert(data.message);
+            bootstrap.Modal.getInstance(document.getElementById('changePasswordModal')).hide();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to change password');
+    }
+});
+</script>
+{% endblock %}

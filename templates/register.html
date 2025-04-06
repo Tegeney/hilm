@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="auth-card p-4 shadow-lg">
+                <div class="text-center mb-4">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AliEarn Ethiopia" class="logo mb-3" style="height: 80px;">
+                    <h2 class="text-white">Create Your Account</h2>
+                    <p class="text-white-50">Join thousands earning with AliExpress in Ethiopia</p>
+                </div>
+
+                <form method="POST" novalidate>
+                    <input type="hidden" name="captcha_text" value="{{ captcha_text }}">
+
+                    <!-- Username Field -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label text-white">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-white">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   placeholder="Choose a username" required>
+                        </div>
+                        <div class="form-text text-white-50">4-20 characters, letters and numbers only</div>
+                    </div>
+
+                    <!-- Phone Number Field -->
+                    <div class="mb-3">
+                        <label for="phone" class="form-label text-white">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-white">+251</span>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   placeholder="911223344" pattern="[0-9]{9}" required>
+                        </div>
+                        <div class="form-text text-white-50">Enter your 9-digit Ethiopian phone number</div>
+                    </div>
+
+                    <!-- Password Fields -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label text-white">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-white">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Create password" required>
+                            <button class="btn btn-outline-light toggle-password" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength mt-2">
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-white-50">Password strength</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label text-white">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-white">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input type="password" class="form-control" id="confirm_password" 
+                                   name="confirm_password" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+
+                    <!-- Invitation Code -->
+                    <div class="mb-3">
+                        <label for="invitation_code" class="form-label text-white">Invitation Code (Optional)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-white">
+                                <i class="bi bi-gift"></i>
+                            </span>
+                            <input type="text" class="form-control" id="invitation_code" 
+                                   name="invitation_code" placeholder="e.g., ETH12345">
+                        </div>
+                        <div class="form-text text-white-50">Get 50 ETB bonus for you and your referrer</div>
+                    </div>
+
+                    <!-- Terms Agreement -->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="agreement" name="agreement" required>
+                        <label class="form-check-label text-white" for="agreement">
+                            I agree to the <a href="#" class="text-warning" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a>
+                        </label>
+                    </div>
+
+                    <!-- CAPTCHA -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label text-white mb-0">Security Check</label>
+                            <button type="button" class="btn btn-sm btn-outline-light" id="refresh-captcha">
+                                <i class="bi bi-arrow-clockwise"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="captcha-container bg-dark p-3 rounded d-flex align-items-center justify-content-between">
+                            <span class="captcha-text text-warning fw-bold" id="captcha-text">{{ captcha_text }}</span>
+                            <input type="text" class="form-control w-50" id="captcha" name="captcha" 
+                                   placeholder="Enter code" required>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus"></i> Create Account
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p class="text-white">Already have an account? 
+                        <a href="{{ url_for('login') }}" class="text-warning fw-bold">Sign In</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Terms of Service</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Account Registration</h6>
+                <p>You must provide accurate and complete information when creating an account...</p>
+                
+                <h6>2. Earnings and Payments</h6>
+                <p>All earnings are subject to verification and may be withheld if fraudulent activity is detected...</p>
+                
+                <h6>3. User Responsibilities</h6>
+                <p>You are responsible for maintaining the confidentiality of your account credentials...</p>
+                
+                <h6>4. Termination</h6>
+                <p>We reserve the right to suspend or terminate accounts that violate our terms...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}

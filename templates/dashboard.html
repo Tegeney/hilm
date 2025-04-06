@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Card with Balance -->
+    <div class="dashboard-card animate-in">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-0">Welcome, {{ user.username }}!</h2>
+                <p class="mb-0 text-white-50">Last login: {{ user.last_login.strftime('%Y-%m-%d %H:%M') if user.last_login else 'First login' }}</p>
+            </div>
+            <div class="text-end">
+                <h4 class="mb-0 text-accent">{{ "%.2f"|format(user.balance) }} ETB</h4>
+                <small class="text-white-50">Available Balance</small>
+                <button class="btn btn-sm btn-success mt-2" data-bs-toggle="modal" data-bs-target="#dailyRewardModal">
+                    <i class="bi bi-gift"></i> Claim Daily Reward
+                </button>
+            </div>
+        </div>
+        <!-- ... rest of your existing dashboard content ... -->
+    </div>
+</div>
+
+<!-- Daily Reward Modal -->
+<div class="modal fade" id="dailyRewardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Claim Daily Reward</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <p>Complete this verification to claim your 50 ETB daily reward</p>
+                    <div class="captcha-container bg-secondary p-2 rounded d-inline-block">
+                        <span class="captcha-text fw-bold">{{ captcha_text }}</span>
+                    </div>
+                </div>
+                <form id="dailyRewardForm">
+                    <input type="hidden" name="captcha_text" value="{{ captcha_text }}">
+                    <div class="mb-3">
+                        <label class="form-label text-white">Enter the code above:</label>
+                        <input type="text" class="form-control" name="captcha_input" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-check-circle"></i> Verify and Claim Reward
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // ... existing task completion script ...
+    
+    // Daily Reward Form Submission
+    $('#dailyRewardForm').submit(function(e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+        
+        $.ajax({
+            url: '/claim_daily_reward',
+            method: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    flashMessage(response.message, 'success');
+                    $('#dailyRewardModal').modal('hide');
+                    $('.balance-amount').text(response.new_balance + ' ETB');
+                } else {
+                    flashMessage(response.error, 'danger');
+                }
+            },
+            error: function(xhr) {
+                flashMessage('Error claiming reward. Please try again.', 'danger');
+            }
+        });
+    });
+    
+    function flashMessage(message, type) {
+        const alert = $(`
+            <div class="alert alert-${type} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3" role="alert" style="z-index: 9999">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `);
+        $('body').append(alert);
+        setTimeout(() => alert.alert('close'), 5000);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="dashboard-card animate-in">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Invest in {{ package.name }}</h2>
+            <span class="badge {% if package.level == 1 %}bg-primary
+                          {% elif package.level == 2 %}bg-success
+                          {% elif package.level == 3 %}bg-warning
+                          {% else %}bg-danger{% endif %}">
+                VIP {{ package.level }}
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 vip-{{ package.level }}">
+                        <div class="card-header">
+                            <h5 class="mb-0">Package Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-white-50">Investment Amount:</span>
+                                <span class="fw-bold">{{ package.price }} ETB</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-white-50">Expected Profit:</span>
+                                <span class="fw-bold text-success">{{ package.profit }} ETB</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-white-50">Duration:</span>
+                                <span>{{ package.duration_days }} days</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-white-50">ROI:</span>
+                                <span class="fw-bold text-accent">{{ ((package.profit/package.price)*100)|round(2) }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 bg-dark bg-opacity-25">
+                        <div class="card-header">
+                            <h5 class="mb-0">Payment Instructions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle-fill"></i> Please transfer the exact amount to the account below
+                            </div>
+                            
+                            <div class="bank-details p-3 mb-4 bg-dark bg-opacity-50 rounded">
+                                <h6 class="text-accent mb-3"><i class="bi bi-bank"></i> Bank Details</h6>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Bank Name:</span>
+                                    <span>Commercial Bank of Ethiopia</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Account Name:</span>
+                                    <span>AliEarn Ethiopia</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-white-50">Account Number:</span>
+                                    <span>1000203040506</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-white-50">Reference:</span>
+                                    <span>{{ user.username }}</span>
+                                </div>
+                            </div>
+                            
+                            <form method="POST" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="transaction_number" class="form-label text-white">
+                                        <i class="bi bi-receipt"></i> Transaction Number
+                                    </label>
+                                    <input type="text" class="form-control" id="transaction_number" 
+                                           name="transaction_number" required>
+                                    <div class="form-text text-white-50">
+                                        Enter the transaction number from your bank receipt
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="payment_proof" class="form-label text-white">
+                                        <i class="bi bi-image"></i> Upload Payment Proof (Screenshot)
+                                    </label>
+                                    <input type="file" class="form-control" id="payment_proof" 
+                                           name="payment_proof" accept="image/*" required>
+                                    <div class="form-text text-white-50">
+                                        Upload clear screenshot of your payment transaction (max 2MB)
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary w-100 py-2">
+                                    <i class="bi bi-check-circle"></i> Confirm Investment
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

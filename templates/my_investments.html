@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="dashboard-card animate-in">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">My Investments</h2>
+            <a href="{{ url_for('investment_packages') }}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-circle"></i> New Investment
+            </a>
+        </div>
+        <div class="card-body">
+            {% if investments %}
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th class="text-end">Amount</th>
+                            <th class="text-end">Profit</th>
+                            <th>Status</th>
+                            <th>Invested On</th>
+                            <th>Completion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for investment in investments %}
+                        {% set package = InvestmentPackage.query.get(investment.package_id) %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge {% if package.level == 1 %}bg-primary
+                                                  {% elif package.level == 2 %}bg-success
+                                                  {% elif package.level == 3 %}bg-warning
+                                                  {% else %}bg-danger{% endif %} me-2">
+                                        VIP {{ package.level }}
+                                    </span>
+                                    {{ package.name }}
+                                </div>
+                            </td>
+                            <td class="text-end">{{ package.price }} ETB</td>
+                            <td class="text-end text-success">{{ package.profit }} ETB</td>
+                            <td>
+                                <span class="badge 
+                                    {% if investment.status == 'pending' %}bg-warning
+                                    {% elif investment.status == 'approved' %}bg-success
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ investment.status|title }}
+                                </span>
+                            </td>
+                            <td>{{ investment.invested_at.strftime('%d %b %Y') }}</td>
+                            <td>{{ investment.expected_completion.strftime('%d %b %Y') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-wallet2 display-5 text-white-50 mb-3"></i>
+                <h4 class="text-white-50">No investments yet</h4>
+                <p class="text-white-50">Start growing your money with our VIP packages</p>
+                <a href="{{ url_for('investment_packages') }}" class="btn btn-primary mt-2">
+                    <i class="bi bi-coin"></i> View Packages
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
